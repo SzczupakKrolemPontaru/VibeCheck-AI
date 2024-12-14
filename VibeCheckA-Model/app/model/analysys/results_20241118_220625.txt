@@ -1,6 +1,0 @@
-Sentiment analysis summary:
-Positive: 66
-Neutral: 0
-Negative: 39
-
-Sentences with the least confidence and neutral sentiment:

@@ -1,18 +1,20 @@
 from flask import Flask, request, jsonify
-from sentiment_analysys import summarize_results
+from model.sentiment_analysys import summarize_results
+from model.SentimentAnalyzerModel import SentimentAnalyzer
 
 app = Flask(__name__)
+analyzer = SentimentAnalyzer()
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
     data = request.json
     texts = data.get('texts', [])
-    
+
     if not texts:
         return jsonify({"error": "No texts provided"}), 400
 
-    summary = summarize_results(texts)
-
+    result = analyzer.analyze_sentiment(texts)
+    summary = summarize_results(result)
     response = {
         "summary": summary,
     }

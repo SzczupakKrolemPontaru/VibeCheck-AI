@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+*.pyc
 
 # Log file
 *.log
@@ -56,3 +57,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### AI models ###
+/VibeCheckA-Model/onnx_model/
+/VibeCheckA-Model/optimized_onnx_model/
+/VibeCheckA-Model/quantized_onnx_model/
