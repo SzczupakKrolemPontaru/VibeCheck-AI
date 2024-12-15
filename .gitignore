@@ -64,9 +64,15 @@ models/onnx_model/model.onnx
 models/onnx_model/special_tokens_map.json
 models/onnx_model/tokenizer_config.json
 models/onnx_model/tokenizer.json
+models/onnx_model/sentencepiece.bpe.model
 models/optimized_onnx_model/config.json
 models/optimized_onnx_model/model_optimized.onnx
 models/optimized_onnx_model/ort_config.json
 models/optimized_onnx_model/special_tokens_map.json
 models/optimized_onnx_model/tokenizer_config.json
 models/optimized_onnx_model/tokenizer.json
+models/optimized_onnx_model/sentencepiece.bpe.model
+models/quantized_onnx_model/quantized_model.onnx
+models/quantized_onnx_model/sentencepiece.bpe.model
+models/quantized_onnx_model/special_tokens_map.json
+models/quantized_onnx_model/tokenizer_config.json
