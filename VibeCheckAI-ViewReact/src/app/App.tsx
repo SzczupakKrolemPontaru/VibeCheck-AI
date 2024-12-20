@@ -6,7 +6,9 @@ import {AppContainer} from "Components/container/AppContainer.component";
 import {AppRouter} from "App/router/AppRouter";
 import {PersistGate} from 'redux-persist/integration/react';
 import store, {persistor} from "Redux/store";
+
 import './App.style.css';
+import 'primeflex/primeflex.css';
 
 export default class App extends Component {
     render(): ReactElement {
