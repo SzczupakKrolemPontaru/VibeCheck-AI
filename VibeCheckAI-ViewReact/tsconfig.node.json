@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2022",
-    "lib": ["DOM", "ES2023"],
-    "module": "ESNext",
+      "module": "es2022",
+      "target": "es2022",
+      "lib": [
+          "esnext.array",
+          "dom",
+          "es2022",
+          "dom.iterable",
+          "scripthost"
+      ],
     "skipLibCheck": true,
 
     /* Bundler mode */

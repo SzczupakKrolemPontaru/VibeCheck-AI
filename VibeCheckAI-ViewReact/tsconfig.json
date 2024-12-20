@@ -1,7 +1,51 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "App/*": ["src/app/*"],
+            "Components/*": ["src/common/components/*"],
+            "Redux/*": ["src/common/redux/*"],
+            "Images/*": ["src/assets/images/*"],
+            "Growl/*": ["src/app/growl/*"],
+            "Security/*": ["src/app/security/*"]
+        },
+        "outDir": "./.tmp/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "allowJs": true,
+        "checkJs": false,
+        "removeComments": true,
+        "skipLibCheck": true,
+        "module": "es2022",
+        "target": "es2022",
+        "lib": [
+            "esnext.array",
+            "dom",
+            "es2022",
+            "dom.iterable",
+            "scripthost"
+        ],
+        "strict": false,
+        "skipDefaultLibCheck": true,
+        "allowUnusedLabels": true,
+        "allowUnreachableCode": false,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
+        "moduleResolution": "node",
+
+        "noImplicitThis": true,
+        "noUnusedLocals": false,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+
+    },
+    "include": [
+        "./src/index.tsx",
+        "./src/**/*",
+        "./src/**/**/*"
+    ]
 }
