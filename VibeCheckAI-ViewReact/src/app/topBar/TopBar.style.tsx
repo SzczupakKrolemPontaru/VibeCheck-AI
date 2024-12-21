@@ -1,6 +1,9 @@
-import styled from "styled-components";
+import {VibeCheckColors} from 'src/common/colors/VibeCheckColors';
+import styled from 'styled-components';
 
 export const StyledTopBar = styled.div`
+    background-color: ${VibeCheckColors.white};
     align-items: center;
-    height: 2.5rem;
+    height: fit-content;
+    margin-bottom: 1rem;
 `

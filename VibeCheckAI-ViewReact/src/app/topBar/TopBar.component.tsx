@@ -1,11 +1,11 @@
 import {StyledTopBar} from 'App/topBar/TopBar.style';
-import {CustomButton} from 'Components/customButton/CustomButton.component';
+import {ButtonWithIcon} from 'Components/button/buttonWithIcon/ButtonWithIcon.component';
 import React, {FC, ReactElement} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setPlatform} from 'Redux/selectedPlatform/selectedPlatform.slice';
 import {PlatformType} from 'Redux/selectedPlatform/SelectedPlatform.type';
 import {AppState} from 'Redux/store';
-import {translateText} from '../../lang/TranslationUtils';
+import {faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
 
 export const TopBar: FC = (): ReactElement => {
 
@@ -21,18 +21,20 @@ export const TopBar: FC = (): ReactElement => {
 
         </div>
         <div className="col-1">
-            <CustomButton 
+            <ButtonWithIcon 
                 onClick={() => {changeSelectedPlatform(PlatformType.YOUTUBE)}}
-                secondary={selectedPlatform !== PlatformType.YOUTUBE}>
-                    {translateText("YOUTUBE")}
-            </CustomButton>
+                secondary={selectedPlatform !== PlatformType.YOUTUBE}
+                icon={faYoutube} 
+                buttonText="YOUTUBE">
+            </ButtonWithIcon>
         </div>
         <div className="col-1">
-            <CustomButton 
+            <ButtonWithIcon
                 onClick={() => {changeSelectedPlatform(PlatformType.TWITTER)}}
-                secondary={selectedPlatform !== PlatformType.TWITTER}>
-                    {translateText("TWITTER")}
-            </CustomButton>
+                secondary={selectedPlatform !== PlatformType.TWITTER}
+                icon={faTwitter}
+                buttonText="TWITTER">
+            </ButtonWithIcon>
         </div>
     </StyledTopBar>
 }
