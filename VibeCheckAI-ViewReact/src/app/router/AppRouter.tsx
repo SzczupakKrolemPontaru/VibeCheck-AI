@@ -1,7 +1,6 @@
-import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
-import {ReactElement} from "react";
-import React from "react";
-import {TopBar} from "App/topBar/TopBar.component";
+import {TopBar} from 'App/topBar/TopBar.component';
+import React, {ReactElement} from 'react';
+import {createBrowserRouter, createRoutesFromElements, Route} from 'react-router-dom';
 
 const MainPage: ReactElement = <>
     <TopBar/>
@@ -9,6 +8,6 @@ const MainPage: ReactElement = <>
 
 export const AppRouter = createBrowserRouter(
     createRoutesFromElements(
-        <Route path="/chat" element={MainPage}/>
+        <Route path="/" element={MainPage}/>
     )
 )

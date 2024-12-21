@@ -1,5 +1,5 @@
+import {PlatformType} from 'Redux/selectedPlatform/SelectedPlatform.type';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {PlatformType} from "Redux/selectedPlatform/SelectedPlatform.type";
 
 interface SelectedPlatformState {
     platform: PlatformType;
