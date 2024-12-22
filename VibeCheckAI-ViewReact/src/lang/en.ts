@@ -9,5 +9,7 @@ export const enTexts: any = {
     "TWITTER_LINK_INPUT_PLACEHOLDER": "Paste Twitter tweet URL",
     "ANALYZE": "Analyze",
     
+    "SOCIAL_MEDIA_ANALYSIS_HEADER": "Analyze social media performance",
+    "SOCIAL_MEDIA_ANALYSIS_SUB_HEADER": "Get detailed insights for a YouTube video or Twitter posts",
     "ENGAGEMENT_OVERVIEW": "Engagement Overview",
 }

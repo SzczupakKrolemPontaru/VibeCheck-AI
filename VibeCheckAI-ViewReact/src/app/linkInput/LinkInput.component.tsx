@@ -18,17 +18,16 @@ interface LinkInputProps {
 
 export const LinkInput: FC<LinkInputProps> = (props: LinkInputProps): ReactElement => {
     return <StyledLinkInput>
-        <h2>{props.header}</h2>
-        <div className='flex gap-2'>
-            <IconField className='w-8' iconPosition="left">
+        <div className='flex gap-2 h-full'>
+            <IconField className='w-9' iconPosition="left">
                 <InputIcon className="pi pi-link"> </InputIcon>
                 <InputText 
-                    className='border-round-md w-full' 
+                    className='border-round-md w-full h-full' 
                     value={props.linkValue} 
                     onChange={(e) => props.setLinkValue(e.target.value)}
                     placeholder={props.placeholder ?? EMPTY_STRING} />
             </IconField>
-            <CustomButton className='w-4'>
+            <CustomButton className='w-3'>
                 {translateText("ANALYZE")}
             </CustomButton>
         </div>
