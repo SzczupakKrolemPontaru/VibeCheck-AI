@@ -12,4 +12,6 @@ export const enTexts: any = {
     "SOCIAL_MEDIA_ANALYSIS_HEADER": "Analyze social media performance",
     "SOCIAL_MEDIA_ANALYSIS_SUB_HEADER": "Get detailed insights for a YouTube video or Twitter posts",
     "ENGAGEMENT_OVERVIEW": "Engagement Overview",
+
+    "FEEDBACK_ANALYSIS_CHART_HEADER": "Feedback analysis",
 }

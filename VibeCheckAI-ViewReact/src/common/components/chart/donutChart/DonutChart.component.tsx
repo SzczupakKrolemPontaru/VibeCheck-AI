@@ -7,8 +7,7 @@ Chart.register(ArcElement, Tooltip, Legend);
 interface DonutChartProps {
     data: ChartData<'doughnut'>;
     options?: ChartOptions<'doughnut'>;
-    chartHeight?: number;
-    chartWidth?: number;
+    size?: number;
 }
 
 export const DonutChart: FC<DonutChartProps> = (props: DonutChartProps): ReactElement => {
@@ -34,5 +33,9 @@ export const DonutChart: FC<DonutChartProps> = (props: DonutChartProps): ReactEl
         };
     }, [props.data, props.options]);
 
-    return <canvas ref={chartRef} width={props.chartWidth ?? "480px"} height={props.chartHeight ?? "480px"}/>;
+    return <canvas ref={chartRef} width={props.size} height={props.size}/>;
 };
+
+DonutChart.defaultProps = {
+    size: 400,
+}
