@@ -14,12 +14,8 @@ def analyze():
         return jsonify({"error": "No texts provided"}), 400
 
     result = analyzer.analyze_sentiment(texts)
-    # summary = summarize_results(result)
-    # response = {
-    #     "summary": summary,
-    # }
     return jsonify(result)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5172)

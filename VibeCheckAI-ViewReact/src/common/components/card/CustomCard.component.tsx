@@ -1,9 +1,8 @@
 import React, {ReactElement} from 'react';
-import {StyledTile} from './Tile.style';
-import {Panel} from "primereact/panel";
+import {StyledCustomCard} from './CustomCard.style';
 import {Card} from "primereact/card";
 
-interface TileProps {
+interface CustomCardProps {
     className?: string;
     children: ReactElement[] | ReactElement;
     backgroundColor?: string;
@@ -11,10 +10,10 @@ interface TileProps {
     subTitle?: string
 }
 
-export const Tile: React.FC<TileProps> = (props: TileProps): ReactElement => {
-    return <StyledTile className={props.className} backgroundColor={props.backgroundColor}>
+export const CustomCard: React.FC<CustomCardProps> = (props: CustomCardProps): ReactElement => {
+    return <StyledCustomCard className={props.className} backgroundColor={props.backgroundColor}>
         <Card title={props.title} subTitle={props.subTitle}>
             {props.children}
         </Card>
-    </StyledTile>
+    </StyledCustomCard>
 }

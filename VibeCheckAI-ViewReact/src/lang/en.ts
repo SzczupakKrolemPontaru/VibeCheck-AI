@@ -14,4 +14,12 @@ export const enTexts: any = {
     "ENGAGEMENT_OVERVIEW": "Engagement Overview",
 
     "FEEDBACK_ANALYSIS_CHART_HEADER": "Feedback analysis",
+    "COMMENTS": "Comments",
+
+    "CHANNEL_TITLE": "Title",
+    "CHANNEL_DESCRIPTION": "Description",
+    "CHANNEL_VIEWS_COUNT": "All time views",
+    "CHANNEL_SUBS_COUNT": "Subscriptions",
+    "CHANNEL_VIDEOS_COUNT": "Videos count",
+    "CHANNEL_CREATED_AT": "Channel created",
 }

@@ -1,0 +1,48 @@
+{
+    "kind": "youtube#channelListResponse",
+    "etag": "S-w4e7JFLRh-H1xkJIfkURaXrLk",
+    "pageInfo": {
+        "totalResults": 1,
+        "resultsPerPage": 5
+    },
+    "items": [
+        {
+            "kind": "youtube#channel",
+            "etag": "QCdmyvyXv4LyYqNMrbUjjy7HF3Q",
+            "id": "UCWQSjd8en-DrTKwtcfsQ_cg",
+            "snippet": {
+                "title": "DJ Skręt Jąder",
+                "description": "elo żelo \n\n\n",
+                "customUrl": "djskretjader",
+                "publishedAt": "2022-01-02T13:16:48.834868Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/aJbw69rs68ZjiJnDrKPrwZhnUMYyBtuiAHvinxGD1IesqkReCGezis14EfDrfZ9wg97s44II=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/aJbw69rs68ZjiJnDrKPrwZhnUMYyBtuiAHvinxGD1IesqkReCGezis14EfDrfZ9wg97s44II=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/aJbw69rs68ZjiJnDrKPrwZhnUMYyBtuiAHvinxGD1IesqkReCGezis14EfDrfZ9wg97s44II=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800
+                    }
+                },
+                "localized": {
+                    "title": "DJ Skręt Jąder",
+                    "description": "elo żelo \n\n\n"
+                }
+            },
+            "statistics": {
+                "viewCount": "3424777",
+                "subscriberCount": "19300",
+                "hiddenSubscriberCount": false,
+                "videoCount": "111"
+            }
+        }
+    ]
+}

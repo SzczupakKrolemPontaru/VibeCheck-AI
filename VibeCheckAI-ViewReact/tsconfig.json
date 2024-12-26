@@ -5,6 +5,8 @@
             "App/*": ["src/app/*"],
             "Components/*": ["src/common/components/*"],
             "Redux/*": ["src/common/redux/*"],
+            "Colors/*": ["src/common/colors/*"],
+            "Utils/*": ["src/common/utils/*"],
             "Images/*": ["src/assets/images/*"],
             "Growl/*": ["src/app/growl/*"],
             "Security/*": ["src/app/security/*"]

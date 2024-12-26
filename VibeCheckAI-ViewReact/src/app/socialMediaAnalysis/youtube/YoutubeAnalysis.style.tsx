@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {VibeCheckColors} from "../../../common/colors/VibeCheckColors";
+import {VibeCheckColors} from "Colors/VibeCheckColors";
 
 export const StyledYoutubeAnalysis = styled.div`
     display: flex;
