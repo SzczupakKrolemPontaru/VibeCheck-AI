@@ -15,6 +15,9 @@ export const enTexts: any = {
 
     "FEEDBACK_ANALYSIS_CHART_HEADER": "Feedback analysis",
     "COMMENTS": "Comments",
+    "CHANNEL_INFORMATION": "Channel information",
+    "TOXICITY_PERCENTAGE": "Toxicity",
+    "SPAM_PERCENTAGE": "Spam",
 
     "CHANNEL_TITLE": "Title",
     "CHANNEL_DESCRIPTION": "Description",

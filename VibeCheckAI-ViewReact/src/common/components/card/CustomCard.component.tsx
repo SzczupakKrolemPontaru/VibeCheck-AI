@@ -1,6 +1,7 @@
 import React, {ReactElement} from 'react';
 import {StyledCustomCard} from './CustomCard.style';
 import {Card} from "primereact/card";
+import {translateText} from "../../../lang/TranslationUtils";
 
 interface CustomCardProps {
     className?: string;
@@ -12,7 +13,7 @@ interface CustomCardProps {
 
 export const CustomCard: React.FC<CustomCardProps> = (props: CustomCardProps): ReactElement => {
     return <StyledCustomCard className={props.className} backgroundColor={props.backgroundColor}>
-        <Card title={props.title} subTitle={props.subTitle}>
+        <Card title={translateText(props.title)} subTitle={translateText(props.subTitle)}>
             {props.children}
         </Card>
     </StyledCustomCard>

@@ -1,4 +1,4 @@
-export interface ChannelInformationDTO {
+export interface YouTubeChannelInformationDTO {
     channelTitle: string;
     channelDescription: string;
     channelCustomUrl: string;
@@ -8,7 +8,7 @@ export interface ChannelInformationDTO {
     channelCreatedAt: Date;
 }
 
-export const InitialChannelInformation: ChannelInformationDTO = {
+export const InitialYouTubeChannelInformation: YouTubeChannelInformationDTO = {
     channelTitle: "DJ Skręt Jąder",
     channelDescription: "elo żelo \n\n\n",
     channelCustomUrl: "djskretjader",

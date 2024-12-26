@@ -12,4 +12,11 @@ export const StyledYoutubeAnalysis = styled.div`
         padding: 2rem;
         background-color: ${VibeCheckColors.white};
     }
+    
+    .knob-container {
+        .p-card-content {
+            display: flex;
+            justify-content: center;
+        }
+    }
 `
