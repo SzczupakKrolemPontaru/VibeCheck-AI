@@ -15,7 +15,7 @@ export const SocialMediaAnalysis: FC<SocialMediaAnalysisProps> = (props: SocialM
 
     const platformType: PlatformType = useSelector((state: AppState) => state.selectedPlatform.platform);
 
-    const platformAnalysysComponentMap: Record<PlatformType, ReactElement> = {
+    const platformAnalysisComponentMap: Record<PlatformType, ReactElement> = {
         [PlatformType.TWITTER]: <TwitterAnalysis />,
         [PlatformType.YOUTUBE]: <YoutubeAnalysis />
     }
@@ -25,6 +25,6 @@ export const SocialMediaAnalysis: FC<SocialMediaAnalysisProps> = (props: SocialM
             <div className="text-6xl font-bold">{translateText("SOCIAL_MEDIA_ANALYSIS_HEADER")}</div>
             <div className="text-2xl">{translateText("SOCIAL_MEDIA_ANALYSIS_SUB_HEADER")}</div>
         </div>
-        {platformAnalysysComponentMap[platformType]}
+        {platformAnalysisComponentMap[platformType]}
     </StyledSocialMediaAnalysis>
 }

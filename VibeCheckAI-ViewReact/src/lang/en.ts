@@ -12,4 +12,17 @@ export const enTexts: any = {
     "SOCIAL_MEDIA_ANALYSIS_HEADER": "Analyze social media performance",
     "SOCIAL_MEDIA_ANALYSIS_SUB_HEADER": "Get detailed insights for a YouTube video or Twitter posts",
     "ENGAGEMENT_OVERVIEW": "Engagement Overview",
+
+    "FEEDBACK_ANALYSIS_CHART_HEADER": "Feedback analysis",
+    "COMMENTS": "Comments",
+    "CHANNEL_INFORMATION": "Channel information",
+    "TOXICITY_PERCENTAGE": "Toxicity",
+    "SPAM_PERCENTAGE": "Spam",
+
+    "CHANNEL_TITLE": "Title",
+    "CHANNEL_DESCRIPTION": "Description",
+    "CHANNEL_VIEWS_COUNT": "All time views",
+    "CHANNEL_SUBS_COUNT": "Subscriptions",
+    "CHANNEL_VIDEOS_COUNT": "Videos count",
+    "CHANNEL_CREATED_AT": "Channel created",
 }
