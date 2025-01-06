@@ -76,3 +76,9 @@ models/quantized_onnx_model/quantized_model.onnx
 models/quantized_onnx_model/sentencepiece.bpe.model
 models/quantized_onnx_model/special_tokens_map.json
 models/quantized_onnx_model/tokenizer_config.json
+VibeCheckAI-Logic/src/main/resources/application.properties
+VibeCheckAI-Logic/src/main/resources/application.properties
+*.properties
+
+/VibeCheckAI-Model/models/emotionAnalysis
+/VibeCheckAI-Model/models/sentimentAnalysis
