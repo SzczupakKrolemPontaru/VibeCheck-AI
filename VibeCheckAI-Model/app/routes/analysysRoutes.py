@@ -9,13 +9,33 @@ sentimentAnalyzer = SentimentAnalyzer()
 emotionAnalyzer = EmotionAnalyzer()
 
 @sentiment_analysis_route.route('/', methods=['POST'])
-def analyze():
-    commentsMap = request.get_json()
-    result = sentimentAnalyzer.analyzeSentiment(commentsMap)
-    return jsonify(result)
+def analyze_sentiment():
+    data = request.get_json()
+    comments = data.get('comments')
+    result = sentimentAnalyzer.analyzeSentiment(comments)
+    
+    label_counts = {}
+    for item in result:
+        label = item['label']
+        if label in label_counts:
+            label_counts[label] += 1
+        else:
+            label_counts[label] = 1
+
+    return jsonify(label_counts)
 
 @emotions_analysis_route.route('/', methods=['POST'])
-def analyze():
-    commentsMap = request.get_json()
-    result = emotionAnalyzer.analyzeEmotions(commentsMap)
-    return jsonify(result)
+def analyze_emotions():
+    data = request.get_json()
+    comments = data.get('comments')
+    result = emotionAnalyzer.analyzeEmotions(comments)
+    
+    label_counts = {}
+    for item in result:
+        label = item['label']
+        if label in label_counts:
+            label_counts[label] += 1
+        else:
+            label_counts[label] = 1
+
+    return jsonify(label_counts)

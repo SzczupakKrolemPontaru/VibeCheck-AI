@@ -1,65 +1,55 @@
 import onnxruntime
+import torch
 from transformers import AutoTokenizer
 import numpy as np
 from scipy.special import softmax
+import gc
 
-TOKENIZER_NAME = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+TOKENIZER_NAME = "tabularisai/multilingual-sentiment-analysis"
 MODEL_PATH = "./models/sentimentAnalysis/model_optimized.onnx"
-MAX_COMMENT_LENGTH = 512
-BATCH_SIZE = 1024
+MAX_COMMENT_LENGTH = 256
 
 class SentimentAnalyzer:
     def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME, model_max_length=MAX_COMMENT_LENGTH)
+        self.labels = {0: "VERY_NEGATIVE", 1: "NEGATIVE", 2: "NEUTRAL", 3: "POSITIVE", 4: "VERY_POSITIVE"}
+        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME)
+        session_options = onnxruntime.SessionOptions()
+        session_options.enable_mem_pattern = False
+        self.model = onnxruntime.InferenceSession(
+            MODEL_PATH, 
+            sess_options=session_options, 
+            providers=['CUDAExecutionProvider','CPUExecutionProvider']
+        )
 
-        providers = onnxruntime.get_available_providers()
-        if "CUDAExecutionProvider" in providers:
-            print("GPU (CUDA) dostępne. Model zostanie załadowany na GPU.")
-            self.ort_session = onnxruntime.InferenceSession(
-                MODEL_PATH, 
-                providers=["CUDAExecutionProvider", "CPUExecutionProvider"]
-            )
-        else:
-            print("GPU (CUDA) niedostępne. Model zostanie załadowany na CPU.")
-            self.ort_session = onnxruntime.InferenceSession(
-                MODEL_PATH, 
-                providers=["CPUExecutionProvider"]
-            )
+    def analyzeSentiment(self, comments):
+        inputs = self.tokenizer(
+            comments,
+            padding=True,
+            truncation=True,
+            return_tensors="pt",
+            max_length=MAX_COMMENT_LENGTH
+        )
 
-        self.labels = {0: "NEGATIVE", 1: "NEUTRAL", 2: "POSITIVE"}
+        inputs = self.tokenizer(
+            comments,
+            padding=True,
+            truncation=True,
+            return_tensors="np",
+            max_length=MAX_COMMENT_LENGTH
+        )
 
-    def analyzeSentiment(self, commentsWithIds):
+        with torch.no_grad():
+            outputs = self.model.run(None, {key: np.array(value, dtype=np.int64) for key, value in inputs.items()})
+            probabilities = softmax(outputs[0], axis=1)
+
         results = []
+        for prob in probabilities:
+            max_idx = np.argmax(prob)
+            results.append({
+                "label": self.labels[max_idx],
+            })
 
-        commentsWithIds = list(commentsWithIds.values())
-        ids = list(commentsWithIds.keys())
-
-        for i in range(0, len(commentsWithIds), BATCH_SIZE):
-            batch = commentsWithIds[i:i + BATCH_SIZE]
-            batch_ids = ids[i:i + BATCH_SIZE]
-            inputs = self.tokenizer(
-                batch,
-                padding=True,
-                truncation=True,
-                return_tensors="np",
-                max_length=MAX_COMMENT_LENGTH
-            )
-
-            ort_inputs = {
-                key: np.array(value, dtype=np.int64) for key, value in inputs.items()
-            }
-
-            ort_outputs = self.ort_session.run(None, ort_inputs)
-
-            probabilities = softmax(ort_outputs[0], axis=1)
-
-            for j, text in enumerate(batch):
-                max_idx = np.argmax(probabilities[j])
-                results.append({
-                    "id": batch_ids[j],
-                    "text": text,
-                    "label": self.labels[max_idx],
-                    "score": round(float(probabilities[j][max_idx]), 4)
-                })
+        torch.cuda.empty_cache()
+        gc.collect()
 
         return results

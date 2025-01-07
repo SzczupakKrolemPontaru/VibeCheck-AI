@@ -31,7 +31,7 @@ emotionAnalysisModel = ORTModelForSequenceClassification.from_pretrained(EMOTION
 emotionAnalysisTokenizer = AutoTokenizer.from_pretrained(EMOTION_ANALYSIS_MODEL, use_fast=False)
 
 optimizer = ORTOptimizer.from_pretrained(emotionAnalysisModel)
-optimization_config = OptimizationConfig(optimization_level=99, disable_embed_layer_norm_fusion=True)
+optimization_config = OptimizationConfig(optimization_level=2, disable_embed_layer_norm_fusion=True)
 optimizer.optimize(
     save_dir=OPTIMIZED_EMOTION_ANALYSIS_MODEL_DIRECTORY_PATH,
     optimization_config=optimization_config
