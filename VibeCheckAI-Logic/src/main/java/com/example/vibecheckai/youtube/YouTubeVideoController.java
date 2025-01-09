@@ -1,8 +1,6 @@
 package com.example.vibecheckai.youtube;
 
-import com.example.vibecheckai.youtube.model.response.EmotionsEnum;
-import com.example.vibecheckai.youtube.model.response.SentimentEnum;
-import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisResponseDTO;
+import com.example.vibecheckai.youtube.model.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,9 +83,12 @@ public class YouTubeVideoController {
             commentBuffer.clear();
         }
 
+        YouTubeAnalysisVideoStatistics videoStatistics = youTubeApiService.getVideoDetails(videoLink);
+        YouTubeAnalysisChannelInfoDTO channelInfo = youTubeApiService.getChannelDetails(videoStatistics.channelId());
+
         YouTubeAnalysisResponseDTO youTubeAnalysisResponse = new YouTubeAnalysisResponseDTO(
-                null,
-                null,
+                videoStatistics,
+                channelInfo,
                 aggregatedEmotions,
                 aggregatedSentiments,
                 null
