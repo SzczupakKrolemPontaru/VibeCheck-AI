@@ -1,39 +1,41 @@
-import React, {FC, ReactElement} from "react";
-import {CustomLabel} from "Components/label/CustomLabel.component";
-import {createYouTubeChannelLink} from "Utils/VibeCheck.utils";
-import {YouTubeChannelInformationDTO} from "App/socialMediaAnalysis/youtube/service/YouTubeChannelInformation.dto";
+import {
+YouTubeChannelInformationDTO
+} from 'App/socialMediaAnalysis/youtube/service/YouTubeChannelInformation.dto';
+import {CustomLabel} from 'Components/label/CustomLabel.component';
+import React, {FC, ReactElement} from 'react';
+import {createYouTubeChannelLink} from 'Utils/VibeCheck.utils';
 
 interface ChannelInformationProps {
-    channelInformation: YouTubeChannelInformationDTO;
+    channelInformation?: YouTubeChannelInformationDTO;
 }
 
 export const ChannelInformation : FC<ChannelInformationProps> = (props: ChannelInformationProps): ReactElement => {
     return <div className="grid">
         <div className="col-4">
             <CustomLabel text="CHANNEL_TITLE"/>
-            <a href={createYouTubeChannelLink(props.channelInformation.channelCustomUrl)} target="_blank">
-                {props.channelInformation.channelTitle}
+            <a href={createYouTubeChannelLink(props.channelInformation?.customUrl ?? '')} target="_blank">
+                {props.channelInformation?.title ?? ''}
             </a>
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_DESCRIPTION"/>
-            {props.channelInformation.channelDescription}
+            {props.channelInformation?.description ?? ''}
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_CREATED_AT"/>
-            {props.channelInformation.channelCreatedAt.toLocaleString()}
+            {props.channelInformation?.publishedAt?.toLocaleString() ?? ''}
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_VIEWS_COUNT"/>
-            {props.channelInformation.channelViewsCount.toLocaleString()}
+            {props.channelInformation?.viewCount?.toLocaleString() ?? '0'}
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_SUBS_COUNT"/>
-            {props.channelInformation.channelSubsCount.toLocaleString()}
+            {props.channelInformation?.subscriberCount?.toLocaleString() ?? '0'}
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_VIDEOS_COUNT"/>
-            {props.channelInformation.channelVideoCount.toLocaleString()}
+            {props.channelInformation?.videoCount?.toLocaleString() ?? '0'}
         </div>
     </div>
 }

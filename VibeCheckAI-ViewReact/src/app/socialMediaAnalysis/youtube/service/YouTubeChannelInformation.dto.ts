@@ -1,19 +1,19 @@
 export interface YouTubeChannelInformationDTO {
-    channelTitle: string;
-    channelDescription: string;
-    channelCustomUrl: string;
-    channelViewsCount: number;
-    channelSubsCount: number;
-    channelVideoCount: number;
-    channelCreatedAt: Date;
+    title: string;
+    description: string;
+    customUrl: string;
+    publishedAt: Date;
+    viewCount: number;
+    subscriberCount: number;
+    videoCount: number;
 }
 
 export const InitialYouTubeChannelInformation: YouTubeChannelInformationDTO = {
-    channelTitle: "DJ Skręt Jąder",
-    channelDescription: "elo żelo \n\n\n",
-    channelCustomUrl: "djskretjader",
-    channelViewsCount: 3424777,
-    channelSubsCount: 19300,
-    channelVideoCount: 111,
-    channelCreatedAt: new Date("2022-01-02T13:16:48.834868Z")
+    title: "DJ Skręt Jąder",
+    description: "elo żelo \n\n\n",
+    customUrl: "djskretjader",
+    viewCount: 3424777,
+    subscriberCount: 19300,
+    videoCount: 111,
+    publishedAt: new Date("2022-01-02T13:16:48.834868Z")
 }

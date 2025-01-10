@@ -105,6 +105,7 @@ public class YouTubeApiService {
         Map<String, Object> statistics = (Map<String, Object>) videoItem.get("statistics");
 
         String title = (String) snippet.get("title");
+        String videoId = (String) videoItem.get("id");
         String publishedAt = (String) snippet.get("publishedAt");
         String channelId = (String) snippet.get("channelId");
         Map<String, Object> thumbnails = (Map<String, Object>) snippet.get("thumbnails");
@@ -114,7 +115,7 @@ public class YouTubeApiService {
         int likeCount = Integer.parseInt((String) statistics.get("likeCount"));
         int commentCount = Integer.parseInt((String) statistics.get("commentCount"));
 
-        return new YouTubeAnalysisVideoStatistics(title, publishedAt, channelId, thumbnailUrl, viewCount, likeCount, commentCount);
+        return new YouTubeAnalysisVideoStatistics(title, publishedAt, channelId, videoId, thumbnailUrl, viewCount, likeCount, commentCount);
     }
 
     private YouTubeAnalysisChannelInfoDTO parseChannelDetails(Map<String, Object> response) {

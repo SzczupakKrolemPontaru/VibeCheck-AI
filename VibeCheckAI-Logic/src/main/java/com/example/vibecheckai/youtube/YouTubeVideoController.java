@@ -22,18 +22,16 @@ import java.util.Map;
 public class YouTubeVideoController {
 
     @Autowired
-    private final YouTubeVideoService youTubeVideoService;
-    @Autowired
     private final YouTubeApiService youTubeApiService;
     private final String pythonServiceUrl = "http://localhost:5172";
     private final String sentimentAnalysisEndpoint = "/sentimentAnalysis/";
     private final String emotionsAnalysisEndpoint = "/emotionAnalysis/";
 
-    public YouTubeVideoController(YouTubeVideoService youTubeVideoService, YouTubeApiService youTubeApiService) {
-        this.youTubeVideoService = youTubeVideoService;
+    public YouTubeVideoController(YouTubeApiService youTubeApiService) {
         this.youTubeApiService = youTubeApiService;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173/")
     @GetMapping("/videoAnalysis")
     public ResponseEntity<YouTubeAnalysisResponseDTO> getYouTubeVideoAnalysis(@RequestParam String videoLink) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
@@ -45,9 +43,10 @@ public class YouTubeVideoController {
         RestTemplate restTemplate = new RestTemplate();
         String nextPageToken = null;
         List<String> commentBuffer = new ArrayList<>();
+        String videoId = extractVideoId(videoLink);
 
         do {
-            List<String> comments = youTubeApiService.getPaginatedComments(videoLink, nextPageToken);
+            List<String> comments = youTubeApiService.getPaginatedComments(videoId, nextPageToken);
             commentBuffer.addAll(comments);
 
             if (commentBuffer.size() >= 500 || nextPageToken == null) {
@@ -65,7 +64,7 @@ public class YouTubeVideoController {
                 commentBuffer.clear();
             }
 
-            nextPageToken = youTubeApiService.getNextPageToken(videoLink, nextPageToken);
+            nextPageToken = youTubeApiService.getNextPageToken(videoId, nextPageToken);
         } while (nextPageToken != null);
 
         if (!commentBuffer.isEmpty()) {
@@ -83,7 +82,7 @@ public class YouTubeVideoController {
             commentBuffer.clear();
         }
 
-        YouTubeAnalysisVideoStatistics videoStatistics = youTubeApiService.getVideoDetails(videoLink);
+        YouTubeAnalysisVideoStatistics videoStatistics = youTubeApiService.getVideoDetails(videoId);
         YouTubeAnalysisChannelInfoDTO channelInfo = youTubeApiService.getChannelDetails(videoStatistics.channelId());
 
         YouTubeAnalysisResponseDTO youTubeAnalysisResponse = new YouTubeAnalysisResponseDTO(
@@ -137,5 +136,12 @@ public class YouTubeVideoController {
     private Map<EmotionsEnum, Integer> parseEmotionAnalysisResponse(String responseBody) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(responseBody, new TypeReference<Map<EmotionsEnum, Integer>>() {});
+    }
+
+    private String extractVideoId(String videoLink) {
+        if (videoLink == null || !videoLink.contains("v=")) {
+            throw new IllegalArgumentException("Invalid YouTube video link");
+        }
+        return videoLink.split("v=")[1].split("&")[0];
     }
 }

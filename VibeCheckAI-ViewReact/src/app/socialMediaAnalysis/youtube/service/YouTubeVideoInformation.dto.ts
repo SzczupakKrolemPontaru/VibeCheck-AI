@@ -1,19 +1,19 @@
 export interface YouTubeVideoInformationDTO {
-    title: string;
-    videoId: string;
-    thumbnailUrl: string;
-    viewsCount: number;
-    likesCount: number;
-    commentsCount: number;
-    publishDate: Date;
+    title: string,
+    publishedAt: Date
+    videoId: string
+    thumbnailUrl: string
+    viewCount: number,
+    likeCount: number,
+    commentCount: number
 }
 
 export const InitialYouTubeVideoInformation: YouTubeVideoInformationDTO = {
     title: "🔥 MIX DO GRANIA ZYRĄ *poradnik dla ogrodników*",
+    publishedAt: new Date("2022-10-29T12:28:31Z"),
     videoId: "rkOowmP1mHc",
     thumbnailUrl: "https://i.ytimg.com/vi/rkOowmP1mHc/maxresdefault.jpg",
-    viewsCount: 7387,
-    likesCount: 163,
-    commentsCount: 38,
-    publishDate: new Date("2022-10-29T12:28:31Z")
+    viewCount: 7387,
+    likeCount: 163,
+    commentCount: 38,
 }

@@ -1,3 +1,6 @@
+import {
+YouTubeAnalysisResponseDTO
+} from 'App/socialMediaAnalysis/youtube/service/YouTubeAnalysisResponse.dto';
 import {CustomButton} from 'Components/button/CustomButton.component';
 import {IconField} from 'primereact/iconfield';
 import {InputIcon} from 'primereact/inputicon';
@@ -12,6 +15,7 @@ interface LinkInputProps {
     header: string;
     linkValue: string;
     setLinkValue: (event: any) => void;
+    onClick: () => void;
     placeholder?: string;
     icon?: IconProp;
 }
@@ -27,7 +31,7 @@ export const LinkInput: FC<LinkInputProps> = (props: LinkInputProps): ReactEleme
                     onChange={(e) => props.setLinkValue(e.target.value)}
                     placeholder={props.placeholder ?? EMPTY_STRING} />
             </IconField>
-            <CustomButton className='w-3'>
+            <CustomButton className='w-3' onClick={props.onClick}>
                 {translateText("ANALYZE")}
             </CustomButton>
         </div>

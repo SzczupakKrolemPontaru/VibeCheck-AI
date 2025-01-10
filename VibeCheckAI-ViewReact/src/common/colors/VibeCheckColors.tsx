@@ -18,8 +18,12 @@ export const VibeCheckColors = {
     diagramPurple: "#5D47E7",
     diagramYellow: "#EFC954",
 
-    positive: "#9BCB71",
-    negative: "#DD6969",
     increase: "#61AF5F",
     decrease: "#CC3532",
+
+    veryNegative: "#FF4C4C",
+    negative: "#FF9999",
+    neutral: "#FFD700",
+    positive: "#99FF99",
+    veryPositive: "#4CFF4C",
 }
