@@ -1,5 +1,6 @@
 import onnxruntime
 from transformers import AutoTokenizer
+from scipy.special import softmax
 import numpy as np
 
 TOKENIZER_NAME = "cardiffnlp/twitter-roberta-base-emotion-multilabel-latest"
@@ -59,7 +60,7 @@ class EmotionAnalyzer:
             )
 
             outputs = self.model.run(None, {key: np.array(value, dtype=np.int64) for key, value in inputs.items()})
-            probabilities = np.argmax(outputs[0], axis=1)
+            probabilities = softmax(outputs[0], axis=1)
 
             for prob in probabilities:
                 max_idx = np.argmax(prob)

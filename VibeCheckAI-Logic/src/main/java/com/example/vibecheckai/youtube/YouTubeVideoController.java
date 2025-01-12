@@ -1,23 +1,35 @@
 package com.example.vibecheckai.youtube;
 
-import com.example.vibecheckai.youtube.model.response.*;
+import com.example.vibecheckai.youtube.model.response.EmotionsEnum;
+import com.example.vibecheckai.youtube.model.response.SentimentEnum;
+import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisResponseDTO;
+import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisVideoStatistics;
+import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisChannelInfoDTO;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/analysis")
 public class YouTubeVideoController {
-
     @Autowired
     private final YouTubeApiService youTubeApiService;
     private final String pythonServiceUrl = "http://localhost:5172";
@@ -46,15 +58,15 @@ public class YouTubeVideoController {
         List<String> commentBuffer = new ArrayList<>();
 
         do {
-            List<String> comments = youTubeApiService.getPaginatedComments(videoId, nextPageToken);
+            List<String> comments = youTubeApiService.getPaginatedComments(videoId, nextPageToken).join();
             commentBuffer.addAll(comments);
 
-            if (commentBuffer.size() >= 300 || nextPageToken == null) {
+            if (commentBuffer.size() >= 500 || nextPageToken == null) {
                 processCommentsBatch(commentBuffer, restTemplate, aggregatedSentiments, aggregatedEmotions);
                 commentBuffer.clear();
             }
 
-            nextPageToken = youTubeApiService.getNextPageToken(videoId, nextPageToken);
+            nextPageToken = youTubeApiService.getNextPageToken(videoId, nextPageToken).join();
         } while (nextPageToken != null);
 
         if (!commentBuffer.isEmpty()) {

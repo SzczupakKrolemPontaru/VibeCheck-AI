@@ -2,8 +2,13 @@ package com.example.vibecheckai.youtube;
 
 import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisChannelInfoDTO;
 import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisVideoStatistics;
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
@@ -11,40 +16,65 @@ import org.springframework.web.util.UriUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-@Service
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+
+
+@Configuration
+@EnableAsync
 public class YouTubeApiService {
 
     @Value("${youtube.api.key}")
     private String apiKey;
 
-    public List<String> getPaginatedComments(String videoId, String pageToken) {
+    private int allComments = 0;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        CloseableHttpClient client = HttpClients.custom()
+                .build();
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+    }
+
+    @Async
+    public CompletableFuture<List<String>> getPaginatedComments(String videoId, String pageToken) {
         Map<String, Object> response = fetchComments(videoId, pageToken);
         List<String> pageComments = new ArrayList<>();
         processComments(response, pageComments);
-        return pageComments;
+        this.allComments += pageComments.size();
+        System.out.println("Comments fetched: " + this.allComments);
+        return CompletableFuture.completedFuture(pageComments);
     }
 
-    public String getNextPageToken(String videoId, String pageToken) {
+    @Async
+    public CompletableFuture<String> getNextPageToken(String videoId, String pageToken) {
         Map<String, Object> response = fetchComments(videoId, pageToken);
-        return getNextPageToken(response);
+        String nextPageToken = getNextPageToken(response);
+        return CompletableFuture.completedFuture(nextPageToken);
     }
 
     private Map<String, Object> fetchComments(String videoId, String pageToken) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = restTemplate();
         String url = buildCommentsUrl(videoId, pageToken);
         return restTemplate.getForObject(url, Map.class);
     }
 
+    @Cacheable("videoDetails")
     public YouTubeAnalysisVideoStatistics getVideoDetails(String videoId) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = restTemplate();
         String url = buildVideoDetailsUrl(videoId);
         Map<String, Object> response = restTemplate.getForObject(url, Map.class);
         return parseVideoDetails(response);
     }
 
+    @Cacheable("channelDetails")
     public YouTubeAnalysisChannelInfoDTO getChannelDetails(String channelId) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = restTemplate();
         String url = buildChannelDetailsUrl(channelId);
         Map<String, Object> response = restTemplate.getForObject(url, Map.class);
         return parseChannelDetails(response);
@@ -144,7 +174,7 @@ public class YouTubeApiService {
                 .queryParam("videoId", videoId)
                 .queryParam("key", apiKey)
                 .queryParam("textFormat", "plainText")
-                .queryParam("maxResults", 100);
+                .queryParam("maxResults", 150);
 
         if (pageToken != null) {
             builder.queryParam("pageToken", UriUtils.encode(pageToken, "UTF-8"));

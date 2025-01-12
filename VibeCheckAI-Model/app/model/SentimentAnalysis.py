@@ -1,4 +1,5 @@
 import onnxruntime
+from scipy.special import softmax
 from transformers import AutoTokenizer
 import numpy as np
 
@@ -46,7 +47,7 @@ class SentimentAnalyzer:
             )
 
             outputs = self.model.run(None, {key: np.array(value, dtype=np.int64) for key, value in inputs.items()})
-            probabilities = np.argmax(outputs[0], axis=1)
+            probabilities = softmax(outputs[0], axis=1)
 
             for prob in probabilities:
                 max_idx = np.argmax(prob)
