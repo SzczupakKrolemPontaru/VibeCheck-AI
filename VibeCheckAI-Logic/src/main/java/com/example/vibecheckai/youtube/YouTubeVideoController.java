@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/analysis")
@@ -24,43 +21,36 @@ public class YouTubeVideoController {
     @Autowired
     private final YouTubeApiService youTubeApiService;
     private final String pythonServiceUrl = "http://localhost:5172";
-    private final String sentimentAnalysisEndpoint = "/sentimentAnalysis/";
-    private final String emotionsAnalysisEndpoint = "/emotionAnalysis/";
+    private final String sentimentAnalysisEndpoint = "/sentimentAnalysis";
+    private final String emotionsAnalysisEndpoint = "/emotionAnalysis";
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final HttpHeaders headers;
 
     public YouTubeVideoController(YouTubeApiService youTubeApiService) {
         this.youTubeApiService = youTubeApiService;
+        this.headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
     @CrossOrigin(origins = "http://localhost:5173/")
     @GetMapping("/videoAnalysis")
     public ResponseEntity<YouTubeAnalysisResponseDTO> getYouTubeVideoAnalysis(@RequestParam String videoLink) throws JsonProcessingException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        String videoId = extractVideoId(videoLink);
 
-        Map<SentimentEnum, Integer> aggregatedSentiments = initializeSentimentMap();
-        Map<EmotionsEnum, Integer> aggregatedEmotions = initializeEmotionMap();
+        Map<SentimentEnum, Integer> aggregatedSentiments = initializeEnumMap(SentimentEnum.class);
+        Map<EmotionsEnum, Integer> aggregatedEmotions = initializeEnumMap(EmotionsEnum.class);
 
         RestTemplate restTemplate = new RestTemplate();
         String nextPageToken = null;
         List<String> commentBuffer = new ArrayList<>();
-        String videoId = extractVideoId(videoLink);
 
         do {
             List<String> comments = youTubeApiService.getPaginatedComments(videoId, nextPageToken);
             commentBuffer.addAll(comments);
 
-            if (commentBuffer.size() >= 500 || nextPageToken == null) {
-                String requestJson = createRequestJson(commentBuffer);
-                HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-
-                ResponseEntity<String> sentimentAnalysisResponse = restTemplate.postForEntity(pythonServiceUrl + sentimentAnalysisEndpoint, entity, String.class);
-                Map<SentimentEnum, Integer> sentiments = parseSentimentAnalysisResponse(sentimentAnalysisResponse.getBody());
-                aggregateSentimentAnalysisResults(aggregatedSentiments, sentiments);
-
-                ResponseEntity<String> emotionAnalysisResponse = restTemplate.postForEntity(pythonServiceUrl + emotionsAnalysisEndpoint, entity, String.class);
-                Map<EmotionsEnum, Integer> emotions = parseEmotionAnalysisResponse(emotionAnalysisResponse.getBody());
-                aggregateEmotionAnalysisResults(aggregatedEmotions, emotions);
-
+            if (commentBuffer.size() >= 300 || nextPageToken == null) {
+                processCommentsBatch(commentBuffer, restTemplate, aggregatedSentiments, aggregatedEmotions);
                 commentBuffer.clear();
             }
 
@@ -68,18 +58,7 @@ public class YouTubeVideoController {
         } while (nextPageToken != null);
 
         if (!commentBuffer.isEmpty()) {
-            String requestJson = createRequestJson(commentBuffer);
-            HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-
-            ResponseEntity<String> sentimentAnalysisResponse = restTemplate.postForEntity(pythonServiceUrl + sentimentAnalysisEndpoint, entity, String.class);
-            Map<SentimentEnum, Integer> sentiments = parseSentimentAnalysisResponse(sentimentAnalysisResponse.getBody());
-            aggregateSentimentAnalysisResults(aggregatedSentiments, sentiments);
-
-            ResponseEntity<String> emotionAnalysisResponse = restTemplate.postForEntity(pythonServiceUrl + emotionsAnalysisEndpoint, entity, String.class);
-            Map<EmotionsEnum, Integer> emotions = parseEmotionAnalysisResponse(emotionAnalysisResponse.getBody());
-            aggregateEmotionAnalysisResults(aggregatedEmotions, emotions);
-
-            commentBuffer.clear();
+            processCommentsBatch(commentBuffer, restTemplate, aggregatedSentiments, aggregatedEmotions);
         }
 
         YouTubeAnalysisVideoStatistics videoStatistics = youTubeApiService.getVideoDetails(videoId);
@@ -96,46 +75,56 @@ public class YouTubeVideoController {
         return ResponseEntity.ok(youTubeAnalysisResponse);
     }
 
-    private Map<SentimentEnum, Integer> initializeSentimentMap() {
-        Map<SentimentEnum, Integer> map = new HashMap<>();
-        for (SentimentEnum sentiment : SentimentEnum.values()) {
-            map.put(sentiment, 0);
+    private void processCommentsBatch(List<String> commentBuffer,
+                                      RestTemplate restTemplate,
+                                      Map<SentimentEnum, Integer> aggregatedSentiments,
+                                      Map<EmotionsEnum, Integer> aggregatedEmotions) throws JsonProcessingException {
+        String requestJson = createRequestJson(commentBuffer);
+        HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
+
+        ResponseEntity<String> sentimentAnalysisResponse = restTemplate.postForEntity(pythonServiceUrl + sentimentAnalysisEndpoint, entity, String.class);
+        Map<SentimentEnum, Integer> sentiments = parseAnalysisResponse(sentimentAnalysisResponse.getBody(), SentimentEnum.class);
+        aggregateSentimentResults(aggregatedSentiments, sentiments);
+
+        ResponseEntity<String> emotionAnalysisResponse = restTemplate.postForEntity(pythonServiceUrl + emotionsAnalysisEndpoint, entity, String.class);
+        Map<EmotionsEnum, Integer> emotions = parseAnalysisResponse(emotionAnalysisResponse.getBody(), EmotionsEnum.class);
+        aggregateEmotionResults(aggregatedEmotions, emotions);
+    }
+
+    private <T extends Enum<T>> Map<T, Integer> initializeEnumMap(Class<T> enumClass) {
+        Map<T, Integer> map = new HashMap<>();
+        for (T constant : enumClass.getEnumConstants()) {
+            map.put(constant, 0);
         }
         return map;
     }
 
-    private Map<EmotionsEnum, Integer> initializeEmotionMap() {
-        Map<EmotionsEnum, Integer> map = new HashMap<>();
-        for (EmotionsEnum emotion : EmotionsEnum.values()) {
-            map.put(emotion, 0);
-        }
-        return map;
+    private void aggregateSentimentResults(Map<SentimentEnum, Integer> aggregated, Map<SentimentEnum, Integer> toAdd) {
+        toAdd.forEach((key, value) -> aggregated.merge(key, value, Integer::sum));
     }
 
-    private void aggregateSentimentAnalysisResults(Map<SentimentEnum, Integer> aggregated, Map<SentimentEnum, Integer> toAdd) {
-        for (Map.Entry<SentimentEnum, Integer> entry : toAdd.entrySet()) {
-            aggregated.put(entry.getKey(), aggregated.get(entry.getKey()) + entry.getValue());
-        }
-    }
-
-    private void aggregateEmotionAnalysisResults(Map<EmotionsEnum, Integer> aggregated, Map<EmotionsEnum, Integer> toAdd) {
-        for (Map.Entry<EmotionsEnum, Integer> entry : toAdd.entrySet()) {
-            aggregated.put(entry.getKey(), aggregated.get(entry.getKey()) + entry.getValue());
-        }
+    private void aggregateEmotionResults(Map<EmotionsEnum, Integer> aggregated, Map<EmotionsEnum, Integer> toAdd) {
+        toAdd.forEach((key, value) -> aggregated.merge(key, value, Integer::sum));
     }
 
     private String createRequestJson(List<String> youTubeVideoComments) throws JsonProcessingException {
-        return "{\"comments\": " + new ObjectMapper().writeValueAsString(youTubeVideoComments) + "}";
+        return "{\"comments\": " + objectMapper.writeValueAsString(youTubeVideoComments) + "}";
     }
 
-    private Map<SentimentEnum, Integer> parseSentimentAnalysisResponse(String responseBody) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(responseBody, new TypeReference<Map<SentimentEnum, Integer>>() {});
-    }
+    private <T extends Enum<T>> Map<T, Integer> parseAnalysisResponse(String responseBody, Class<T> enumClass) throws JsonProcessingException {
+        Map<String, Integer> rawResponse = objectMapper.readValue(responseBody, new TypeReference<Map<String, Integer>>() {});
 
-    private Map<EmotionsEnum, Integer> parseEmotionAnalysisResponse(String responseBody) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(responseBody, new TypeReference<Map<EmotionsEnum, Integer>>() {});
+        Map<T, Integer> result = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : rawResponse.entrySet()) {
+            try {
+                T enumValue = Enum.valueOf(enumClass, entry.getKey());
+                result.put(enumValue, entry.getValue());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Nieznana wartość enum: " + entry.getKey());
+            }
+        }
+
+        return result;
     }
 
     private String extractVideoId(String videoLink) {

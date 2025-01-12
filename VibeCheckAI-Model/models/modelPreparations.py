@@ -3,38 +3,39 @@ from transformers import AutoTokenizer
 from optimum.onnxruntime import ORTModelForSequenceClassification, ORTOptimizer
 from optimum.onnxruntime.configuration import OptimizationConfig
 
-# Sentiment Analysis model
-SENTIMENT_ANALYSIS_MODEL = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
-OPTIMIZED_SENTIMENT_ANALYSIS_MODEL_DIRECTORY_PATH = "./models/sentimentAnalysis"
+def optimize_model(model_name, output_dir, optimization_level=2, disable_layer_norm_fusion=True):
+    """
+    Function to optimize a model and save it along with its tokenizer.
+    
+    Args:
+        model_name (str): The name of the pre-trained model.
+        output_dir (str): The directory where the optimized model and tokenizer will be saved.
+        optimization_level (int): Optimization level (default 2 for advanced optimizations).
+        disable_layer_norm_fusion (bool): Whether to disable the layer normalization fusion (default True).
+    """
+    os.makedirs(output_dir, exist_ok=True)
 
-os.makedirs(OPTIMIZED_SENTIMENT_ANALYSIS_MODEL_DIRECTORY_PATH, exist_ok=True)
+    model = ORTModelForSequenceClassification.from_pretrained(model_name, export=True)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 
-sentimentAnalysisModel = ORTModelForSequenceClassification.from_pretrained(SENTIMENT_ANALYSIS_MODEL, export=True)
-sentimentAnalysisTokenizer = AutoTokenizer.from_pretrained(SENTIMENT_ANALYSIS_MODEL, use_fast=False)
+    optimizer = ORTOptimizer.from_pretrained(model)
+    optimization_config = OptimizationConfig(
+        optimization_level=optimization_level,
+        disable_embed_layer_norm_fusion=disable_layer_norm_fusion
+    )
 
-optimizer = ORTOptimizer.from_pretrained(sentimentAnalysisModel)
-optimization_config = OptimizationConfig(optimization_level=99, disable_embed_layer_norm_fusion=True)
-optimizer.optimize(
-    save_dir=OPTIMIZED_SENTIMENT_ANALYSIS_MODEL_DIRECTORY_PATH,
-    optimization_config=optimization_config
-)
+    optimizer.optimize(
+        save_dir=output_dir,
+        optimization_config=optimization_config
+    )
 
-sentimentAnalysisTokenizer.save_pretrained(OPTIMIZED_SENTIMENT_ANALYSIS_MODEL_DIRECTORY_PATH)
+    tokenizer.save_pretrained(output_dir)
+    print(f"Model {model_name} has been optimized and saved in: {output_dir}")
 
-# Emotion Analysis model
-EMOTION_ANALYSIS_MODEL = "cardiffnlp/twitter-roberta-base-emotion-multilabel-latest"
-OPTIMIZED_EMOTION_ANALYSIS_MODEL_DIRECTORY_PATH = "./models/emotionAnalysis"
+sentiment_analysis_model = "tabularisai/multilingual-sentiment-analysis"
+emotion_analysis_model = "cardiffnlp/twitter-roberta-base-emotion-multilabel-latest"
+sentiment_analysis_output_dir = "./models/sentimentAnalysis"
+emotion_analysis_output_dir = "./models/emotionAnalysis"
 
-os.makedirs(OPTIMIZED_EMOTION_ANALYSIS_MODEL_DIRECTORY_PATH, exist_ok=True)
-
-emotionAnalysisModel = ORTModelForSequenceClassification.from_pretrained(EMOTION_ANALYSIS_MODEL, export=True)
-emotionAnalysisTokenizer = AutoTokenizer.from_pretrained(EMOTION_ANALYSIS_MODEL, use_fast=False)
-
-optimizer = ORTOptimizer.from_pretrained(emotionAnalysisModel)
-optimization_config = OptimizationConfig(optimization_level=2, disable_embed_layer_norm_fusion=True)
-optimizer.optimize(
-    save_dir=OPTIMIZED_EMOTION_ANALYSIS_MODEL_DIRECTORY_PATH,
-    optimization_config=optimization_config
-)
-
-emotionAnalysisTokenizer.save_pretrained(OPTIMIZED_EMOTION_ANALYSIS_MODEL_DIRECTORY_PATH)
+optimize_model(sentiment_analysis_model, sentiment_analysis_output_dir, optimization_level=99)
+optimize_model(emotion_analysis_model, emotion_analysis_output_dir, optimization_level=99)

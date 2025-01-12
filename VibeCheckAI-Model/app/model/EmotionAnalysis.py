@@ -1,19 +1,14 @@
 import onnxruntime
-import torch
 from transformers import AutoTokenizer
 import numpy as np
-from scipy.special import softmax
-import gc
 
 TOKENIZER_NAME = "cardiffnlp/twitter-roberta-base-emotion-multilabel-latest"
 MODEL_PATH = "./models/emotionAnalysis/model_optimized.onnx"
 MAX_COMMENT_LENGTH = 256
 
 class EmotionAnalyzer:
-    def __init__(self):
+    def __init__(self, session_options):
         self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME)
-        session_options = onnxruntime.SessionOptions()
-        session_options.enable_mem_pattern = False
         self.model = onnxruntime.InferenceSession(
             MODEL_PATH, 
             sess_options=session_options, 
@@ -34,35 +29,44 @@ class EmotionAnalyzer:
             10: "TRUST"
         }
 
-    def analyzeEmotions(self, comments):
-        inputs = self.tokenizer(
-            comments,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=MAX_COMMENT_LENGTH
-        )
+        self.warm_up()
 
+    def warm_up(self):
+        """Perform warm-up by running the model on dummy data."""
+        dummy_data = ["This is a warm-up sentence."] * 64
         inputs = self.tokenizer(
-            comments,
+            dummy_data,
             padding=True,
             truncation=True,
             return_tensors="np",
             max_length=MAX_COMMENT_LENGTH
         )
 
-        with torch.no_grad():
-            outputs = self.model.run(None, {key: np.array(value, dtype=np.int64) for key, value in inputs.items()})
-            probabilities = softmax(outputs[0], axis=1)
+        _ = self.model.run(None, {key: np.array(value, dtype=np.int64) for key, value in inputs.items()})
 
+    def analyzeEmotions(self, comments):
+        BATCH_SIZE = 64 
         results = []
-        for prob in probabilities:
-            max_idx = np.argmax(prob)
-            results.append({
-                "label": self.labels[max_idx],
-            })
 
-        torch.cuda.empty_cache()
-        gc.collect()
+        for i in range(0, len(comments), BATCH_SIZE):
+            batch = comments[i:i + BATCH_SIZE] 
+            inputs = self.tokenizer(
+                batch,
+                padding=True,
+                truncation=True,
+                return_tensors="np",
+                max_length=MAX_COMMENT_LENGTH
+            )
+
+            outputs = self.model.run(None, {key: np.array(value, dtype=np.int64) for key, value in inputs.items()})
+            probabilities = np.argmax(outputs[0], axis=1)
+
+            for prob in probabilities:
+                max_idx = np.argmax(prob)
+                results.append({
+                    "label": self.labels[max_idx],
+                })
+
+            del inputs, outputs, probabilities
 
         return results
