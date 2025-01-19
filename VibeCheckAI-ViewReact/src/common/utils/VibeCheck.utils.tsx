@@ -9,7 +9,7 @@ export const calcRemToPx = (rem: number): number => {
 }
 
 export const createYouTubeChannelLink = (channelName: string) => {
-    return "https://www.youtube.com/c/" + channelName;
+    return "https://www.youtube.com/" + channelName;
 }
 
 export const dateToString = (date: Date) => {

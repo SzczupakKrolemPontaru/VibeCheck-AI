@@ -6,10 +6,9 @@ ChannelInformation
 import {CustomCard} from 'Components/card/CustomCard.component';
 import {DonutChart} from 'Components/chart/donutChart/DonutChart.component';
 import {Accordion} from 'primereact/accordion';
-import {BlockUI} from 'primereact/blockui';
 import {Image} from 'primereact/image';
+import {Knob} from 'primereact/knob';
 import {ProgressSpinner} from 'primereact/progressspinner';
-import {Slider} from 'primereact/slider';
 import React, {FC, ReactElement, useMemo, useState} from 'react';
 import {VibeCheckColors} from 'src/common/colors/VibeCheckColors';
 import {calcRemToPx, isDefined} from 'src/common/utils/VibeCheck.utils';
@@ -29,17 +28,21 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
     const [videoInformation, setVideoInformation] = useState<YouTubeAnalysisResponseDTO>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const data = useMemo(() => ({
-        labels: Array.from(videoInformation?.sentiments?.keys() ?? []),
-        datasets: [
-            {
-                data: Array.from(videoInformation?.sentiments?.values() ?? []),
-                backgroundColor: [VibeCheckColors.veryNegative, VibeCheckColors.negative  VibeCheckColors.neutral, VibeCheckColors.positive, VibeCheckColors.veryPositive],
-                hoverBackgroundColor: [VibeCheckColors.veryNegative, VibeCheckColors.negative, VibeCheckColors.neutral, VibeCheckColors.positive, VibeCheckColors.veryPositive],
-            },
-        ],
-    }), [videoInformation]);
-    
+    const data = useMemo(() => {
+        const labels = videoInformation?.sentiments ? Object.keys(videoInformation.sentiments).map(label => translateText(label)) : [];
+        const values = videoInformation?.sentiments ? Object.values(videoInformation.sentiments) : [];
+        return {
+            labels,
+            datasets: [
+                {
+                    data: values,
+                    backgroundColor: [VibeCheckColors.veryNegative, VibeCheckColors.negative, VibeCheckColors.neutral, VibeCheckColors.positive, VibeCheckColors.veryPositive],
+                    hoverBackgroundColor: [VibeCheckColors.veryNegative, VibeCheckColors.negative, VibeCheckColors.neutral, VibeCheckColors.positive, VibeCheckColors.veryPositive],
+                },
+            ],
+        };
+    }, [videoInformation]);
+
     const options = useMemo(() => ({
         responsive: true,
         maintainAspectRatio: false,
@@ -49,15 +52,13 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
         setIsLoading(true);
         try {
             const data: YouTubeAnalysisResponseDTO = await YouTubeAnalysisService.getYouTubeAnalysis(linkValue);
-            data.sentiments = new Map(Object.entries(data.sentiments));
-            data.emotions = new Map(Object.entries(data.emotions));
             setVideoInformation(data);
+            setIsLoading(false);
         } catch (error) {
             console.error(error);
-        } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return <StyledYoutubeAnalysis>
         <LinkInput 
@@ -79,7 +80,6 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
                         <Image
                             src={videoInformation?.videoStatisticsInfo?.thumbnailUrl ?? ''}
                             alt="Image"
-                            style={{maxWidth: '100%', maxHeight: '100%', objectFit: 'cover'}}
                         />
                         <div>{videoInformation?.videoStatisticsInfo?.title ?? ''}</div>
                     </CustomCard>
@@ -91,7 +91,7 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
                         </CustomCard>
                         <div className="grid justify-content-around">
                             <CustomCard title="TOXICITY_PERCENTAGE" className="col-5 p-0 knob-container">
-                                <Slider value={videoInformation?.toxicity ?? 0} />
+                                <Knob value={videoInformation?.toxicity ?? 0} />
                             </CustomCard>
                         </div>
                     </div>
@@ -112,7 +112,6 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
                 </div>
             </div>
             <div className="performance-metrics-box">
-                <div style={{fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.5rem'}}> Video statistics</div>
                 <div className="grid">
                     <div className="col-4">
                         <CustomCard subTitle="Views">

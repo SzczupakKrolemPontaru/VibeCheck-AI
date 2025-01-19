@@ -1,5 +1,5 @@
+import {VibeCheckColors} from 'Colors/VibeCheckColors';
 import styled from 'styled-components';
-import {VibeCheckColors} from "Colors/VibeCheckColors";
 
 export const StyledYoutubeAnalysis = styled.div`
     display: flex;
@@ -9,8 +9,8 @@ export const StyledYoutubeAnalysis = styled.div`
     gap: 1.5rem;
     
     .performance-metrics-box {
-        padding: 2rem;
-        background-color: ${VibeCheckColors.white};
+        padding: 2rem 0;
+        background-color: ${VibeCheckColors.backgroundGrey};
     }
     
     .knob-container {

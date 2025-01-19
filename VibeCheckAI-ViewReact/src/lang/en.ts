@@ -25,4 +25,10 @@ export const enTexts: any = {
     "CHANNEL_SUBS_COUNT": "Subscriptions",
     "CHANNEL_VIDEOS_COUNT": "Videos count",
     "CHANNEL_CREATED_AT": "Channel created",
+
+    "VERY_NEGATIVE": "Very negative",
+    "NEGATIVE": "Negative",
+    "NEUTRAL": "Neutral",
+    "POSITIVE": "Positive",
+    "VERY_POSITIVE": "Very positive",
 }

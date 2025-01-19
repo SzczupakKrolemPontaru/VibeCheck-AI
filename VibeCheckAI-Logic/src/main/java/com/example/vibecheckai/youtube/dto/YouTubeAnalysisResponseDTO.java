@@ -1,4 +1,7 @@
-package com.example.vibecheckai.youtube.model.response;
+package com.example.vibecheckai.youtube.dto;
+
+import com.example.vibecheckai.enums.EmotionsEnum;
+import com.example.vibecheckai.enums.SentimentEnum;
 
 import java.util.Map;
 

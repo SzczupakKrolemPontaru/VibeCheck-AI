@@ -1,4 +1,4 @@
-package com.example.vibecheckai.youtube.model.response;
+package com.example.vibecheckai.enums;
 
 public enum EmotionsEnum {
     ANGER,

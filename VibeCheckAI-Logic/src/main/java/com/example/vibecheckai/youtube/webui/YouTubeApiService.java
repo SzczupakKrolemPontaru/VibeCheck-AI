@@ -1,7 +1,7 @@
-package com.example.vibecheckai.youtube;
+package com.example.vibecheckai.youtube.webui;
 
-import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisChannelInfoDTO;
-import com.example.vibecheckai.youtube.model.response.YouTubeAnalysisVideoStatistics;
+import com.example.vibecheckai.youtube.dto.YouTubeAnalysisChannelInfoDTO;
+import com.example.vibecheckai.youtube.dto.YouTubeAnalysisVideoStatistics;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,11 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.RestTemplate;
 
 
 @Configuration
