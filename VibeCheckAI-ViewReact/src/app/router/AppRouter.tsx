@@ -1,16 +1,19 @@
+import {AuthorizationPage} from 'App/authorizationPage/AuthorizationPage.component';
 import {SocialMediaAnalysis} from 'App/socialMediaAnalysis/SocialMediaAnalysys.component';
 import {TopBar} from 'App/topBar/TopBar.component';
-import React, {ReactElement} from 'react';
-import {createBrowserRouter, createRoutesFromElements, Route} from 'react-router-dom';
+import React, {FC, ReactElement} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 const MainPage: ReactElement = <>
     <TopBar/>
     <SocialMediaAnalysis/>
 </>
 
-export const AppRouter = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" element={MainPage}>
-        </Route>
-    )
-)
+export const AppRouter: FC = (): ReactElement => (
+	<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<AuthorizationPage />} />
+			<Route path="/socialMediaAnalysis" element={MainPage} />
+		</Routes>
+	</BrowserRouter>
+);

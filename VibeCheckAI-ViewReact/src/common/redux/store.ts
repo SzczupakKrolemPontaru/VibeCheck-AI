@@ -1,8 +1,8 @@
-import {configureStore} from '@reduxjs/toolkit';
-import {persistStore, persistReducer} from 'redux-persist';
+import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import selectedPlatformSlice from "Redux/selectedPlatform/selectedPlatform.slice";
-import userSubscriptionLevelSlice from "Redux/userSubscriptionLevel/userSubscriptionLevel.slice";
+import selectedPlatformSlice from 'Redux/selectedPlatform/selectedPlatform.slice';
+import userSlice from 'Redux/user/user.slice';
+import {configureStore} from '@reduxjs/toolkit';
 
 const persistConfig = {
     key: 'root',
@@ -10,16 +10,16 @@ const persistConfig = {
 };
 
 const selectedPlatformReducer = persistReducer(persistConfig, selectedPlatformSlice);
-const userSubscriptionLevelReducer = persistReducer(persistConfig, userSubscriptionLevelSlice);
+const userSliceReducer = persistReducer(persistConfig, userSlice);
 
 const store = configureStore({
     reducer: {
         selectedPlatform: selectedPlatformReducer,
-        userSubscriptionLevel: userSubscriptionLevelReducer
+        user: userSliceReducer
     },
 });
 
-export type AppState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export const persistor = persistStore(store);

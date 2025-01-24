@@ -1,8 +1,7 @@
-
-
 export const VibeCheckColors = {
     white: "#ffffff",
     black: "#000000",
+    TRANSPARENT: 'transparent',
 
     backgroundGrey: "#F9FAFB",
     lightGrey: "#9FA3AF",

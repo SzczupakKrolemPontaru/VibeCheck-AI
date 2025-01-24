@@ -31,4 +31,13 @@ export const enTexts: any = {
     "NEUTRAL": "Neutral",
     "POSITIVE": "Positive",
     "VERY_POSITIVE": "Very positive",
+
+    "LOGIN_BUTTON": "Login",
+    "REGISTER_BUTTON": "Register",
+    "ENTER_EMAIL": "Enter your email",
+    "ENTER_PASSWORD": "Enter your password",
+    "REPEAT_PASSWORD": "Confirm your password",
+    "DONT_HAVE_ACCOUNT": "Don't have an account?\nYou can register here!",
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?\nYou can login here!",
+    "LOGIN_SUCCESS": "Logged in successfully",
 }
