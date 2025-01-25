@@ -1,7 +1,7 @@
 import React, {FC, ReactElement} from 'react';
 import {useSelector} from 'react-redux';
 import {PlatformType} from 'Redux/selectedPlatform/SelectedPlatform.type';
-import {AppState} from 'Redux/store';
+import {RootState} from 'Redux/store';
 import {translateText} from 'src/lang/TranslationUtils';
 import {StyledSocialMediaAnalysis} from './SocialMediaAnalysys.style';
 import {TwitterAnalysis} from './twitter/TwitterAnalysis.component';
@@ -13,7 +13,7 @@ interface SocialMediaAnalysisProps {
 
 export const SocialMediaAnalysis: FC<SocialMediaAnalysisProps> = (props: SocialMediaAnalysisProps): ReactElement => {
 
-    const platformType: PlatformType = useSelector((state: AppState) => state.selectedPlatform.platform);
+    const platformType: PlatformType = useSelector((state: RootState) => state.selectedPlatform.platform);
 
     const platformAnalysisComponentMap: Record<PlatformType, ReactElement> = {
         [PlatformType.TWITTER]: <TwitterAnalysis />,

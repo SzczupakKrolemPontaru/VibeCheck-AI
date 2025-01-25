@@ -13,5 +13,5 @@ export interface LoginRequestDTO {
 export interface LoginResponseDTO {
     token: string;
     email: string;
-    subscription: UserSubscription;
+    subscriptionLevel: UserSubscription;
 }

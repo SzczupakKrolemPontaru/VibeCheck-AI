@@ -36,14 +36,18 @@ export const LoginPanel: FC<LoginPanelProps> = (props: LoginPanelProps): ReactEl
 		const apiResponse: ApiResponse<LoginResponseDTO> =
 			await AuthorizationPageService.createAuthenticationTokenRest(loginRequestDTO);
 
-			//TODO: Does not navigate to the next page
-		if (apiResponse.success) {
-			toast.success(translateText("LOGIN_SUCCESS"));
-			dispatch(setUser({role: apiResponse.response.subscription, token: apiResponse.response.token}));
-			navigate("/socialMediaAnalysis");
-		} else {
-			toast.error(apiResponse.message);
-		}
+			if (apiResponse.success) {
+				toast.success(translateText("LOGIN_SUCCESS"));
+				dispatch(setUser({
+					subscriptionLevel: apiResponse.payload.subscriptionLevel,
+					token: apiResponse.payload.token,
+					email: apiResponse.payload.email
+				}));
+				console.log('Navigating to /socialMediaAnalysis');
+				navigate('/socialMediaAnalysis', { replace: true });
+			} else {
+				toast.error(apiResponse.message);
+			}
 	};
 
 	return <StyledLoginPanel>

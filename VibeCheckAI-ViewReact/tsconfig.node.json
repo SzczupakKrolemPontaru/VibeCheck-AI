@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-      "module": "es2022",
-      "target": "es2022",
+      "module": "CommonJS",
+      "target": "ES2022",
       "lib": [
           "esnext.array",
           "dom",
-          "es2022",
+          "ES2023",
           "dom.iterable",
           "scripthost"
       ],

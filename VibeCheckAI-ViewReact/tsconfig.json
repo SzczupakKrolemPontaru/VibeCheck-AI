@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
+        "baseUrl": ".",
         "paths": {
             "App/*": ["src/app/*"],
             "Components/*": ["src/common/components/*"],
@@ -19,12 +19,12 @@
         "checkJs": false,
         "removeComments": true,
         "skipLibCheck": true,
-        "module": "es2022",
-        "target": "es2022",
+        "module": "commonjs",
+        "target": "ES6",
         "lib": [
             "esnext.array",
-            "dom",
-            "es2022",
+            "DOM", 
+            "ES2016",
             "dom.iterable",
             "scripthost"
         ],
@@ -46,7 +46,7 @@
 
     },
     "include": [
-        "./src/index.tsx",
+        "src/main.tsx",
         "./src/**/*",
         "./src/**/**/*"
     ]

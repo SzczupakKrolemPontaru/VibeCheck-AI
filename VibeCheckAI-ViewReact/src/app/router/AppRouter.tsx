@@ -11,9 +11,15 @@ const MainPage: ReactElement = <>
 
 export const AppRouter: FC = (): ReactElement => (
 	<BrowserRouter>
-		<Routes>
-			<Route path="/" element={<AuthorizationPage />} />
-			<Route path="/socialMediaAnalysis" element={MainPage} />
-		</Routes>
-	</BrowserRouter>
+	<Routes>
+		<Route
+			path="/"
+			element={<AuthorizationPage />}
+		/>
+		<Route
+			path="/socialMediaAnalysis"
+			element={MainPage}
+		/>
+	</Routes>
+</BrowserRouter>
 );

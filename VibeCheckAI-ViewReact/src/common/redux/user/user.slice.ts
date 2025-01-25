@@ -2,31 +2,31 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {UserSubscription} from './UserSubscriptionLevel.type';
 
 interface UserState {
-    subscription: UserSubscription;
+    subscriptionLevel: UserSubscription;
     token: string;
+    email: string;
 }
 
 const initialState: UserState = {
-    subscription: UserSubscription.FREE,
-    token: ""
+    subscriptionLevel: UserSubscription.FREE,
+    token: "",
+    email: ""
 };
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setRole: (state, action: PayloadAction<UserState['subscription']>) => {
-            state.subscription = action.payload;
-        },
         setToken: (state, action: PayloadAction<string>) => {
             state.token = action.payload;
         },
-        setUser: (state, action: PayloadAction<{role: UserSubscription, token: string}>) => {
-            state.subscription = action.payload.role;
+        setUser: (state, action: PayloadAction<{subscriptionLevel: UserSubscription, token: string, email: string}>) => {
+            state.subscriptionLevel = action.payload.subscriptionLevel;
             state.token = action.payload.token;
+            state.email = action.payload.email;
         },
     },
 });
 
-export const { setRole, setToken, setUser } = userSlice.actions;
+export const { setToken, setUser } = userSlice.actions;
 export default userSlice.reducer;
