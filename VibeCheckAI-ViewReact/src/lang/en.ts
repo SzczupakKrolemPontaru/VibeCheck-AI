@@ -45,5 +45,6 @@ export const enTexts: any = {
     "PASSWORDS_NOT_MATCHING": "Passwords are not matching",
 
     "REMOVE_FROM_FAVORITES": "Are you sure you want to remove this video from favorites?",
-
+    "BLOCKED_MESSAGE": "You need to have a premium subscription to access Twitter analysis",
+    "SUBSCRIBE_BUTTON": "Subscribe now"
 }

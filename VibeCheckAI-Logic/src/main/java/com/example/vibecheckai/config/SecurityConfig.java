@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/auth/register", "api/auth/login").permitAll()
+                        .requestMatchers("api/auth/register", "api/auth/login", "/api/analysis/videoAnalysis").permitAll()
                         .anyRequest().authenticated()
                 );
 

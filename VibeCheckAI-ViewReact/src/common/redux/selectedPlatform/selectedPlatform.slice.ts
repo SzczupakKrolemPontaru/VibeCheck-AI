@@ -13,8 +13,8 @@ const selectedPlatformSlice = createSlice({
     name: 'selectedPlatform',
     initialState,
     reducers: {
-        setPlatform: (state, action: PayloadAction<SelectedPlatformState['platform']>) => {
-            state.platform = action.payload;
+        setPlatform: (state, action: PayloadAction<{platform: PlatformType}>) => {
+            state.platform = action.payload.platform;
         },
     },
 });

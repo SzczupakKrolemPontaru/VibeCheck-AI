@@ -9,7 +9,6 @@ export const StyledTopBar = styled.div`
     height: fit-content;
     min-height: 4rem;
     border-bottom: 0.0625rem solid rgba(0, 0, 0, 0.35);
-    margin-bottom: 1.5rem;
     margin-left: 0;
 
     .platform-buttons {

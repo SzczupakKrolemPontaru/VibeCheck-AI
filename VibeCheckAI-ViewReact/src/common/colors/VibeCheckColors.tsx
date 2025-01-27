@@ -25,4 +25,17 @@ export const VibeCheckColors = {
     neutral: "#FFD700",
     positive: "#99FF99",
     veryPositive: "#4CFF4C",
+
+    // Emotions colors
+    anger: "#FF0000",
+    anticipation: "#FFA500",
+    disgust: "#8B0000",
+    fear: "#800080",
+    joy: "#FFFF00",
+    love: "#FF69B4",
+    optimism: "#00FF00",
+    pessimism: "#808080",
+    sadness: "#0000FF",
+    surprise: "#FFD700",
+    trust: "#008000"
 }

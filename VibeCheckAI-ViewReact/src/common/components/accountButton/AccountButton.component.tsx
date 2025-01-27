@@ -6,6 +6,8 @@ import {RootState} from 'Redux/store';
 import {setUser} from 'Redux/user/user.slice';
 import {translateText} from 'src/lang/TranslationUtils';
 import {StyledSplitButton} from './SplitButton.style';
+import {setPlatform} from "Redux/selectedPlatform/selectedPlatform.slice";
+import {PlatformType} from "Redux/selectedPlatform/SelectedPlatform.type";
 
 export const AccountButton: FC = (): ReactElement => {
     const dispatch = useDispatch();
@@ -25,6 +27,7 @@ export const AccountButton: FC = (): ReactElement => {
                 token: '',
                 email: ''
             }));
+            dispatch(setPlatform({platform: PlatformType.YOUTUBE}));
         }}
     ];
 

@@ -18,17 +18,19 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {YouTubeAnalysisService} from './service/YouTubeAnalysis.service';
 import {YouTubeAnalysisResponseDTO} from './service/YouTubeAnalysisResponse.dto';
 import {StyledYoutubeAnalysis} from './YoutubeAnalysis.style';
+import {ApiResponse} from "Utils/axiosUtils/ApiResponse.type";
 
 interface YoutubeAnalysisProps {
+    youtubeLink?: string;
 }
 
 export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysisProps): ReactElement => {
 
-    const [linkValue, setLinkValue] = useState<string>("");
+    const [linkValue, setLinkValue] = useState<string>(props.youtubeLink ?? "");
     const [videoInformation, setVideoInformation] = useState<YouTubeAnalysisResponseDTO>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const data = useMemo(() => {
+    const sentimentData = useMemo(() => {
         const labels = videoInformation?.sentiments ? Object.keys(videoInformation.sentiments).map(label => translateText(label)) : [];
         const values = videoInformation?.sentiments ? Object.values(videoInformation.sentiments) : [];
         return {
@@ -43,6 +45,27 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
         };
     }, [videoInformation]);
 
+    const emotionData = useMemo(() => {
+        const labels = videoInformation?.sentiments ? Object.keys(videoInformation.emotions).map(label => translateText(label)) : [];
+        const values = videoInformation?.sentiments ? Object.values(videoInformation.emotions) : [];
+        return {
+            labels,
+            datasets: [
+                {
+                    data: values,
+                    backgroundColor: [VibeCheckColors.anger, VibeCheckColors.anticipation, VibeCheckColors.disgust,
+                        VibeCheckColors.fear, VibeCheckColors.joy, VibeCheckColors.love, VibeCheckColors.optimism,
+                        VibeCheckColors.pessimism, VibeCheckColors.sadness, VibeCheckColors.surprise, VibeCheckColors.trust
+                    ],
+                    hoverBackgroundColor: [VibeCheckColors.anger, VibeCheckColors.anticipation, VibeCheckColors.disgust,
+                        VibeCheckColors.fear, VibeCheckColors.joy, VibeCheckColors.love, VibeCheckColors.optimism,
+                        VibeCheckColors.pessimism, VibeCheckColors.sadness, VibeCheckColors.surprise, VibeCheckColors.trust
+                    ],
+                },
+            ],
+        };
+    }, [videoInformation]);
+
     const options = useMemo(() => ({
         responsive: true,
         maintainAspectRatio: false,
@@ -51,11 +74,10 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
     const onAnalyzeYouTubeVideo = async () => {
         setIsLoading(true);
         try {
-            const data: YouTubeAnalysisResponseDTO = await YouTubeAnalysisService.getYouTubeAnalysis(linkValue);
-            setVideoInformation(data);
+            const data: ApiResponse<YouTubeAnalysisResponseDTO> = await YouTubeAnalysisService.getYouTubeAnalysis(linkValue);
+            setVideoInformation(data.payload);
             setIsLoading(false);
         } catch (error) {
-            console.error(error);
             setIsLoading(false);
         }
     };
@@ -75,11 +97,12 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
         ) : (
             isDefined(videoInformation) && <> 
             <div className="grid">
-                <div className="col-7 h-full">
+                <div className="col-6 h-full">
                     <CustomCard>
                         <Image
                             src={videoInformation?.videoStatisticsInfo?.thumbnailUrl ?? ''}
                             alt="Image"
+                            style={{ width: '100%', height: 'auto', maxWidth: '300px' }}
                         />
                         <div>{videoInformation?.videoStatisticsInfo?.title ?? ''}</div>
                     </CustomCard>
@@ -98,17 +121,15 @@ export const YoutubeAnalysis: FC<YoutubeAnalysisProps> = (props: YoutubeAnalysis
                 </div>
             </div>
             <div className="grid">
-                <div className="col-4">
+                <div className="col-6">
                     <CustomCard title={translateText("FEEDBACK_ANALYSIS_CHART_HEADER")}>
-                        <DonutChart data={data} options={options} size={calcRemToPx(25)}/>
+                        <DonutChart data={sentimentData} options={options} size={calcRemToPx(25)}/>
                     </CustomCard>
                 </div>
                 <div className="col-6">
-                </div>
-                <div className="col-6">
-                    <Accordion>
-
-                    </Accordion>
+                    <CustomCard title={translateText("FEEDBACK_ANALYSIS_CHART_HEADER")}>
+                        <DonutChart data={emotionData} options={options} size={calcRemToPx(25)}/>
+                    </CustomCard>
                 </div>
             </div>
             <div className="performance-metrics-box">

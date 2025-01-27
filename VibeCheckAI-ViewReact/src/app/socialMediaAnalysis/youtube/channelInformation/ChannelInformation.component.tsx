@@ -10,6 +10,8 @@ interface ChannelInformationProps {
 }
 
 export const ChannelInformation : FC<ChannelInformationProps> = (props: ChannelInformationProps): ReactElement => {
+
+
     return <div className="grid">
         <div className="col-4">
             <CustomLabel text="CHANNEL_TITLE"/>
@@ -23,7 +25,7 @@ export const ChannelInformation : FC<ChannelInformationProps> = (props: ChannelI
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_CREATED_AT"/>
-            {props.channelInformation?.publishedAt?.toLocaleString() ?? ''}
+            {new Date(props.channelInformation?.publishedAt).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"})  ?? ''}
         </div>
         <div className="col-4">
             <CustomLabel text="CHANNEL_VIEWS_COUNT"/>

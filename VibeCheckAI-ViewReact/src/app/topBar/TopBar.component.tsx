@@ -17,7 +17,7 @@ export const TopBar: FC = (): ReactElement => {
     const selectedPlatform: PlatformType = useSelector((state: RootState) => state.selectedPlatform.platform);
 
     const changeSelectedPlatform = (platform: PlatformType) => {
-        dispatch(setPlatform(platform));
+        dispatch(setPlatform({ platform }));
     }
 
     return <StyledTopBar className="grid">
@@ -36,7 +36,7 @@ export const TopBar: FC = (): ReactElement => {
                     className='h-full'
                     onClick={() => {changeSelectedPlatform(PlatformType.YOUTUBE)}}
                     secondary={selectedPlatform !== PlatformType.YOUTUBE}
-                    icon='pi-facebook'>
+                    icon='pi pi-facebook' iconPos='left'>
                         {translateText("YOUTUBE")}
                 </CustomButton>
                 <CustomButton

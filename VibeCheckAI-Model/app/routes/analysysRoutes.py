@@ -21,7 +21,7 @@ def analyze_sentiment():
     data = request.get_json()
     comments = data.get('comments')
     result = sentimentAnalyzer.analyzeSentiment(comments)
-
+    print(data)
     return jsonify(summarize_results(result))
 
 @emotions_analysis_route.route('/emotionAnalysis', methods=['POST'])
