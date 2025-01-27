@@ -35,14 +35,14 @@ export const RegisterPanel: FC<RegisterPanelProps> = (props: RegisterPanelProps)
 		};
 
 		if (!validateIdenticalPasswords(props.userPassword, repeatedPassword)) {
-			toast.error("Hasła nie są identyczne");
+			toast.error(translateText("PASSWORDS_NOT_MATCHING"));
 			return;
 		}
 
 		const response: ApiResponse<any> = await AuthorizationPageService.registerUserRest(userDTO);
 		console.log(response)
 		if (response.success) {
-			toast.success("Zarejestrowano pomyślnie");
+			toast.success(translateText("REGISTER_SUCCESS"));
 			props.onChangePanelClickHandler();
 		} else {
 			toast.error(response.message);
@@ -88,7 +88,7 @@ export const RegisterPanel: FC<RegisterPanelProps> = (props: RegisterPanelProps)
 			<CustomButton 
 				className='w-5' 
 				onClick={onRegisterClickHandler} 
-				backgroundColor={VibeCheckColors.diagramPurple}
+				backgroundcolor={VibeCheckColors.diagramPurple}
 			>
 				{translateText("REGISTER_BUTTON")}
 			</CustomButton>

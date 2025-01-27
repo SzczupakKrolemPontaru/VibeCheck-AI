@@ -1,10 +1,11 @@
-import {ButtonHTMLAttributes, FC} from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
-import {VibeCheckColors} from '../../colors/VibeCheckColors';
+import {VibeCheckColors} from 'Colors/VibeCheckColors';
+import {ButtonProps} from "primereact/button";
 
-export interface CustomButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface CustomButtonProps extends ButtonProps {
     secondary?: boolean;
-    backgroundColor?: string;
+    backgroundcolor?: string;
 }
 
 export const CustomButton: FC<CustomButtonProps> = styled.button<CustomButtonProps>`
@@ -12,9 +13,8 @@ export const CustomButton: FC<CustomButtonProps> = styled.button<CustomButtonPro
     gap: 0.5rem;
     width: 100%;
     padding: 0.5rem;
-    background-color: ${({ secondary, backgroundColor }) => secondary ? VibeCheckColors.white : backgroundColor ? backgroundColor : VibeCheckColors.diagramPurple};
+    background-color: ${({ secondary, backgroundcolor: backgroundColor }) => secondary ? VibeCheckColors.white : backgroundColor ? backgroundColor : VibeCheckColors.diagramPurple};
     color: ${({ secondary }) => secondary ? VibeCheckColors.darkGrey : VibeCheckColors.white};
-    border: ${({ secondary }) => secondary ? (`0.0625rem solid ${VibeCheckColors.darkGrey}`) : "none"};
     border-radius: 0.35rem;
     font-size: 1rem;
     overflow: hidden;

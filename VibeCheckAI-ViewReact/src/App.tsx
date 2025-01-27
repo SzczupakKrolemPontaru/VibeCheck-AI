@@ -8,14 +8,15 @@ import {Provider} from 'react-redux';
 import {ToastContainer} from 'react-toastify';
 import {PersistGate} from 'redux-persist/integration/react';
 import store, {persistor} from 'Redux/store';
-import {AppRouter} from './app/router/AppRouter';
+import {AppRouter} from 'App/router/AppRouter';
+import {GlobalStyle} from './GlobalStyles';
 
 export default class App extends Component {
     render(): ReactElement {
         return <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <ToastContainer
-                    position="top-right"
+                    position="top-left"
                     autoClose={5000}
                     hideProgressBar
                     newestOnTop={false}
@@ -24,6 +25,7 @@ export default class App extends Component {
                     theme="light"
                 />
                 <StrictMode>
+                    <GlobalStyle />
                     <AppRouter />
                 </StrictMode>
             </PersistGate>

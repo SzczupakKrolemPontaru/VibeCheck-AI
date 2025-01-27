@@ -9,7 +9,7 @@
         "dom.iterable",
         "scripthost",
         "DOM", 
-        "ES2016"
+        "ES2023"
     ],
     "skipLibCheck": true,
 

@@ -80,7 +80,7 @@ export const LoginPanel: FC<LoginPanelProps> = (props: LoginPanelProps): ReactEl
 			<CustomButton 
 				className='w-5' 
 				onClick={onLoginClickHandler} 
-				backgroundColor={VibeCheckColors.diagramPurple}
+				backgroundcolor={VibeCheckColors.diagramPurple}
 			>
 				{translateText("LOGIN_BUTTON")}
 			</CustomButton>

@@ -40,4 +40,10 @@ export const enTexts: any = {
     "DONT_HAVE_ACCOUNT": "Don't have an account?\nYou can register here!",
     "ALREADY_HAVE_ACCOUNT": "Already have an account?\nYou can login here!",
     "LOGIN_SUCCESS": "Logged in successfully",
+    "LOGOUT_SUCCESS": "Logged out successfully",
+    "REGISTER_SUCCESS": "Registered successfully",
+    "PASSWORDS_NOT_MATCHING": "Passwords are not matching",
+
+    "REMOVE_FROM_FAVORITES": "Are you sure you want to remove this video from favorites?",
+
 }
